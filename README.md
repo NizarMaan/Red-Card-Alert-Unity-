@@ -1,2 +1,2 @@
 # Red-Card-Alert-Unity-
-Android Mobile Game
+A 2D Android Mobile Game in progress.

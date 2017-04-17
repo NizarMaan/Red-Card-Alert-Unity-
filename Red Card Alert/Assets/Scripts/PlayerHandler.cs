@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerHandler : MonoBehaviour {
     public GameObject top_lft, top_rgt, btm_lft, btm_rgt, yellowCard, redCard;   //game objects passed through inspector
-    public Image hit_icon0, hit_icon1, buffTimerIcon;       //images passed through inspector
-    public Text score_text;
+    public Image hit_icon0, hit_icon1, buffTimerIcon, comboImage;       //images passed through inspector
+    public Text score_text, comboText;
     public static int _SCORE;
     public static bool gameOver;
     public GameObject _player;
@@ -16,7 +16,7 @@ public class PlayerHandler : MonoBehaviour {
     private Vector3 playerScreenPoint;
     private Vector3 playerMouseOffset;
     private Buff currentBuff;
-    private int ballCombo;
+    public static int ballCombo;
     private PlayerHandler _playerScript;
     private GameObject vulnTimerIcon, slowTimerIcon, currentTimer;
     
@@ -37,6 +37,8 @@ public class PlayerHandler : MonoBehaviour {
         _playerScript = (PlayerHandler) FindObjectOfType(typeof(PlayerHandler));
         TrailRenderer trail = _playerScript.GetComponent<TrailRenderer>();
         originalTrailColor = trail.GetComponent<SpriteRenderer>().color;
+
+        ComboBox.ResetCombo(comboImage);
     }
 
     // Use this for initialization
@@ -118,12 +120,19 @@ public class PlayerHandler : MonoBehaviour {
             {
                 PlaySound(obj.tag);
                 _SCORE++;
-                ballCombo += 1;
+                if(ballCombo == 0)
+                {
+                    ComboBox.StartCombo(comboImage);
+                }
+                //max possible combo is 100
+                if(ballCombo < 100)
+                {
+                    ComboBox.IncreaseCombo(comboText);
+                }
             }
             if (obj.tag.Equals("Yellow Card"))
             {
-                ballCombo = 0;  //reset ball combo
-
+                ComboBox.ResetCombo(comboImage);
                 if (yellow_count < 1)
                 {
                     showHitIcon(0);
